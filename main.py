@@ -6,14 +6,28 @@ pygame.display.set_caption("Лабіринт")
 
 def run():
     
-    hero = Hero(50,50, 75,75)
+    hero = Hero(50,50, 75,75, image= hero_list)
     clock = pygame.time.Clock()
 
     game = True
     while game:
         window.fill((191, 230, 221))
 
-        hero.move(window)
+        #малювання сітки, потрібно було для зручної побудови стін, зараз не потрібно, але залиште в коді
+        #x,y = 20, 20
+        #for i in range(50):
+        #    pygame.draw.line(window, (255,255,255), (0, y), (1000, y))
+        #    pygame.draw.line(window, (255,255,255), (x, 0), (x, 700))
+        #    x += 20
+        #    y += 20
+        
+        #WALL
+        #запускаємо цикл для проходу по списку стін, і малюємо кожну стіну
+        for wall in wall_list:
+            pygame.draw.rect(window, (255,255,255), wall)
+
+        #HERO
+        hero.move(window)       #запускаємо функцію руху гравця
 
 
         for event in pygame.event.get():
