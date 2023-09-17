@@ -3,7 +3,7 @@ from data import *
 
 pygame.init()
 
-#ствирили батькфівський клас спрайт
+#ствирили батьківський клас спрайт
 class Sprite(pygame.Rect):
     def __init__(self, x, y, width, height, color=(120,120,120), image= None, speed= 5):
         super().__init__(x, y, width, height)
@@ -35,13 +35,21 @@ class Hero(Sprite):
         #функція руху
         if self.MOVE["UP"] and self.y > 0:
             self.y -= self.SPEED
+            if self.collidelist(wall_list) != -1:
+                self.y += self.SPEED
         elif self.MOVE["DOWN"] and self.y < setting_win["HEIGHT"] - self.height:
             self.y += self.SPEED
+            if self.collidelist(wall_list) != -1:
+                self.y -= self.SPEED
         if self.MOVE["LEFT"] and self.x > 0:
             self.x -= self.SPEED
+            if self.collidelist(wall_list) != -1:
+                self.x += self.SPEED
             self.DIRECTION = False      #потрібно дивись вліво
         elif self.MOVE["RIGHT"] and self.x < setting_win["WIDTH"] - self.width:
             self.x += self.SPEED
+            if self.collidelist(wall_list) != -1:
+                self.x -= self.SPEED
             self.DIRECTION = True       #потрібно дивитись вправо
 
         #якщо персонаж рухується, то потрібно змінювати картинки, інакше ставимо картинку героя, де він стоїть на місці
@@ -57,6 +65,23 @@ class Hero(Sprite):
             self.IMAGE_NOW = self.IMAGE
         #демонструємо картинку на екран
         window.blit(self.IMAGE_NOW, (self.x, self.y))
+
+class Bot(Sprite):
+    def __init__(self, x, y, width, height, color=(120,120,120), image= None, speed= 5, orientation= None):
+        super().__init__(x, y, width, height, color, image, speed)
+        self.ORIENTATION = orientation
+    
+    def move(self, window):
+        if self.ORIENTATION.lower() == "horizontal":
+            self.x += self.SPEED
+            if self.collidelist(wall_list) != -1 or self.x <= 0 or self.x + self.width >= setting_win["WIDTH"]:
+                self.SPEED *= -1
+        elif self.ORIENTATION.lower() == "vertical":
+            self.y += self.SPEED
+            if self.collidelist(wall_list) != -1 or self.y <= 0 or self.y + self.height >= setting_win["HEIGHT"]:
+                self.SPEED *= -1
+        self.move_image()
+        window.blit(self.IMAGE, (self.x, self.y))
 
 
 def create_wall(key):

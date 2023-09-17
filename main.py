@@ -6,7 +6,8 @@ pygame.display.set_caption("Лабіринт")
 
 def run():
     
-    hero = Hero(50,50, 75,75, image= hero_list)
+    hero = Hero(50,50, setting_hero["WIDTH"], setting_hero["HEIGHT"], image= hero_list)
+    bot1 = Bot(210, 100, 50, 50, image= bot1_list, orientation= "vertical")
     clock = pygame.time.Clock()
 
     game = True
@@ -28,6 +29,8 @@ def run():
 
         #HERO
         hero.move(window)       #запускаємо функцію руху гравця
+
+        bot1.move(window)
 
 
         for event in pygame.event.get():
